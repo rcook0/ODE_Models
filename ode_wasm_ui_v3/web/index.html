@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Interactive ODE Lab (WASM) — v3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>Interactive ODE Lab (WASM) — v3</h1>
+    <p class="sub">Linear • Van der Pol • Predator–Prey • Duffing</p>
+  </header>
+
+  <section class="controls">
+    <div class="row">
+      <label>Model
+        <select id="model">
+          <option value="linear">Linear 2×2: y' = A y</option>
+          <option value="vdp">Van der Pol</option>
+          <option value="lv">Predator–Prey</option>
+          <option value="duff">Duffing</option>
+        </select>
+      </label>
+
+      <div id="linear-params" class="card">
+        <div class="grid-2">
+          <label>a11 <input id="a11" type="number" step="0.1" value="-1"/></label>
+          <label>a12 <input id="a12" type="number" step="0.1" value="-5"/></label>
+          <label>a21 <input id="a21" type="number" step="0.1" value="2"/></label>
+          <label>a22 <input id="a22" type="number" step="0.1" value="-3"/></label>
+        </div>
+        <div class="row">
+          <label>t<span class="mono">[0,T]</span> T <input id="T_lin" type="number" step="0.5" value="15"/></label>
+          <label>Δt <input id="dt_lin" type="number" step="0.001" value="0.01"/></label>
+        </div>
+      </div>
+
+      <div id="vdp-params" class="card hidden">
+        <div class="row">
+          <label>μ <input id="mu" type="number" step="0.5" value="3"/></label>
+          <label>t<span class="mono">[0,T]</span> T <input id="T_vdp" type="number" step="0.5" value="40"/></label>
+          <label>Δt <input id="dt_vdp" type="number" step="0.001" value="0.01"/></label>
+        </div>
+      </div>
+
+      <div id="lv-params" class="card hidden">
+        <div class="grid-2">
+          <label>α (prey birth) <input id="alpha" type="number" step="0.1" value="1.1"/></label>
+          <label>β (predation)  <input id="beta"  type="number" step="0.1" value="0.4"/></label>
+          <label>δ (growth from prey) <input id="delta" type="number" step="0.1" value="0.1"/></label>
+          <label>γ (predator death)   <input id="gamma" type="number" step="0.1" value="0.4"/></label>
+        </div>
+        <div class="row">
+          <label>t<span class="mono">[0,T]</span> T <input id="T_lv" type="number" step="0.5" value="40"/></label>
+          <label>Δt <input id="dt_lv" type="number" step="0.001" value="0.01"/></label>
+        </div>
+      </div>
+
+      <div id="duff-params" class="card hidden">
+        <div class="grid-2">
+          <label>δ (damping) <input id="d_damp" type="number" step="0.1" value="0.2"/></label>
+          <label>α (linear)  <input id="a_lin"  type="number" step="0.1" value="-1.0"/></label>
+          <label>β (cubic)   <input id="b_cub"  type="number" step="0.1" value="1.0"/></label>
+          <label>γ (drive)   <input id="g_drv"  type="number" step="0.1" value="0.3"/></label>
+          <label>ω (drive)   <input id="w_drv"  type="number" step="0.1" value="1.2"/></label>
+          <label>tφ (vector-field phase) <input id="t_phase" type="number" step="0.1" value="0.0"/></label>
+        </div>
+        <div class="row">
+          <label>t<span class="mono">[0,T]</span> T <input id="T_duff" type="number" step="0.5" value="60"/></label>
+          <label>Δt <input id="dt_duff" type="number" step="0.001" value="0.01"/></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <label>x-range <input id="xmin" type="number" step="0.5" value="-4"/> to <input id="xmax" type="number" step="0.5" value="4"/></label>
+          <label>y-range <input id="ymin" type="number" step="0.5" value="-4"/> to <input id="ymax" type="number" step="0.5" value="4"/></label>
+        </div>
+        <div class="row">
+          <label>Quiver density <input id="dense" type="number" value="20" min="8" max="60"/></label>
+          <button id="resetView">Reset View</button>
+          <button id="clearSeeds">Clear Seeds</button>
+          <button id="run">Run</button>
+        </div>
+        <p class="tip">Click the canvas to drop initial conditions. Shift-click to add more.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="layout">
+    <div class="left">
+      <canvas id="phase" width="720" height="540"></canvas>
+      <div class="legend">
+        <span class="box vf"></span> Vector field
+        <span class="box nc1"></span> Nullcline 1
+        <span class="box nc2"></span> Nullcline 2
+        <span class="box traj"></span> Trajectories (WASM)
+      </div>
+    </div>
+    <aside class="right">
+      <div class="card">
+        <h3>TD-plane (linear only)</h3>
+        <canvas id="td" width="300" height="260"></canvas>
+        <div class="mono" id="td-stats"></div>
+      </div>
+      <div class="card">
+        <h3>Status</h3>
+        <pre id="log" class="log"></pre>
+      </div>
+      <div class="card">
+        <h3>Build / Run</h3>
+        <ol>
+          <li><code>wasm-pack build --target web --release</code> in <span class="mono">rust-wasm/</span></li>
+          <li>Copy <span class="mono">rust-wasm/pkg</span> → <span class="mono">web/</span></li>
+          <li><code>python3 -m http.server -d web 8080</code> and open <code>http://localhost:8080</code></li>
+        </ol>
+      </div>
+    </aside>
+  </section>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
