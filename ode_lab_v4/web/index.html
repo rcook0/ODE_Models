@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>ODE Lab v3 (WASM)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header>
+  <div class="title">
+    <h1>ODE Lab v3</h1>
+    <div class="sub">Live params • export • scenes • 2D + 3D attractors</div>
+  </div>
+  <div class="header-actions">
+    <button id="exportPng">Export PNG</button>
+    <button id="exportSvg">Export SVG</button>
+    <button id="saveScene">Save Scene</button>
+    <button id="loadScene">Load Scene</button>
+    <button id="exportScene">Export Scene JSON</button>
+    <label class="fileBtn">Import Scene<input id="importScene" type="file" accept="application/json"/></label>
+  </div>
+</header>
+
+<section class="controls">
+  <div class="card wide">
+    <div class="row">
+      <label>Model
+        <select id="model">
+          <option value="linear">Linear 2×2</option>
+          <option value="vdp">Van der Pol</option>
+          <option value="lv">Predator–Prey</option>
+          <option value="duffing">Duffing</option>
+          <option value="sir">SIR (S–I plane)</option>
+          <option value="lorenz">Lorenz63 (3D)</option>
+          <option value="rossler">Rössler (3D)</option>
+          <option value="chua">Chua (3D)</option>
+          <option value="thomas">Thomas (3D)</option>
+        </select>
+      </label>
+
+      <label class="toggle"><input id="live" type="checkbox" checked/>Live update</label>
+      <label>Quiver <input id="dense" type="number" value="20" min="8" max="60"/></label>
+
+      <label>View X <input id="xmin" type="number" step="0.5" value="-4"/> to <input id="xmax" type="number" step="0.5" value="4"/></label>
+      <label>View Y <input id="ymin" type="number" step="0.5" value="-4"/> to <input id="ymax" type="number" step="0.5" value="4"/></label>
+
+      <button id="resetView">Reset View</button>
+      <button id="clearSeeds">Clear Seeds</button>
+      <button id="run">Run</button>
+    </div>
+
+    <div id="paramArea" class="paramArea"></div>
+
+    <div class="hint">Click canvas to seed an initial condition. Shift-click adds more seeds. For 3D models, click sets (x0,y0) while z0 stays fixed.</div>
+  </div>
+</section>
+
+<section class="layout">
+  <div class="left">
+    <div class="panel">
+      <div class="panelTitle">Phase Plane (2D)</div>
+      <canvas id="phase" width="760" height="560"></canvas>
+      <div class="legend">
+        <span class="box vf"></span> Vector field
+        <span class="box nc1"></span> Nullcline 1
+        <span class="box nc2"></span> Nullcline 2
+        <span class="box traj"></span> Trajectories
+      </div>
+    </div>
+  </div>
+
+  <aside class="right">
+    <div class="panel">
+      <div class="panelTitle">TD-plane (Linear)</div>
+      <canvas id="td" width="320" height="260"></canvas>
+      <div id="td-stats" class="mono small"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panelTitle">3D Attractor Viewer</div>
+      <canvas id="view3d" width="320" height="320"></canvas>
+      <div class="row smallRow">
+        <label>Yaw <input id="yaw" type="range" min="-3.14" max="3.14" step="0.01" value="0.7"/></label>
+        <label>Pitch <input id="pitch" type="range" min="-1.57" max="1.57" step="0.01" value="0.4"/></label>
+        <label>Scale <input id="scale3" type="range" min="10" max="180" step="1" value="80"/></label>
+      </div>
+      <div class="subNote">Simple 3D→2D projection (no WebGL dependency).</div>
+    </div>
+
+    <div class="panel">
+      <div class="panelTitle">Status</div>
+      <pre id="log" class="log"></pre>
+    </div>
+  </aside>
+</section>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

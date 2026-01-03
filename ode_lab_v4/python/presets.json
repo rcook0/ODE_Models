@@ -1,0 +1,184 @@
+[
+  {
+    "name": "lv_default",
+    "model": "predatorprey",
+    "y0": [
+      1.0,
+      0.5
+    ],
+    "tspan": [
+      0.0,
+      40.0
+    ],
+    "dt": 0.01,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "alpha": 1.0,
+      "beta": 0.1,
+      "delta": 0.075,
+      "gamma": 1.5
+    }
+  },
+  {
+    "name": "duffing_chaotic",
+    "model": "duffing",
+    "y0": [
+      0.1,
+      0.0
+    ],
+    "tspan": [
+      0.0,
+      40.0
+    ],
+    "dt": 0.01,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "delta": 0.2,
+      "alpha": -1.0,
+      "beta": 1.0,
+      "gamma": 0.3,
+      "omega": 1.2
+    }
+  },
+  {
+    "name": "sir_medium",
+    "model": "sir",
+    "y0": [
+      0.99,
+      0.01,
+      0.0
+    ],
+    "tspan": [
+      0.0,
+      160.0
+    ],
+    "dt": 0.2,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "beta": 0.5,
+      "gamma": 0.2
+    }
+  },
+  {
+    "name": "lorenz_classic",
+    "model": "lorenz63",
+    "y0": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "tspan": [
+      0.0,
+      25.0
+    ],
+    "dt": 0.01,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "sigma": 10.0,
+      "rho": 28.0,
+      "beta": 2.6666666666666665
+    }
+  },
+  {
+    "name": "rossler_classic",
+    "model": "rossler",
+    "y0": [
+      0.1,
+      0.1,
+      0.1
+    ],
+    "tspan": [
+      0.0,
+      80.0
+    ],
+    "dt": 0.01,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "a": 0.2,
+      "b": 0.2,
+      "c": 5.7
+    }
+  },
+  {
+    "name": "robertson_stiff",
+    "model": "robertson",
+    "y0": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "tspan": [
+      0.0,
+      100000.0
+    ],
+    "dt": 10.0,
+    "backend": "scipy",
+    "stiff": true,
+    "params": {}
+  },
+  {
+    "name": "chua_double_scroll",
+    "model": "chua",
+    "y0": [
+      0.1,
+      0.0,
+      0.0
+    ],
+    "tspan": [
+      0.0,
+      200.0
+    ],
+    "dt": 0.01,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "alpha": 15.6,
+      "beta": 28.0,
+      "m0": -1.143,
+      "m1": -0.714
+    }
+  },
+  {
+    "name": "thomas_cyclic",
+    "model": "thomas",
+    "y0": [
+      0.1,
+      0.0,
+      0.0
+    ],
+    "tspan": [
+      0.0,
+      400.0
+    ],
+    "dt": 0.02,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "a": 0.208186
+    }
+  },
+  {
+    "name": "hindmarsh_rose_burst",
+    "model": "hindmarshrose",
+    "y0": [
+      -1.0,
+      1.0,
+      3.0
+    ],
+    "tspan": [
+      0.0,
+      2000.0
+    ],
+    "dt": 0.1,
+    "backend": "auto",
+    "stiff": false,
+    "params": {
+      "I": 3.25
+    }
+  }
+]
